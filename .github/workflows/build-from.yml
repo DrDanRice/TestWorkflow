@@ -1,0 +1,28 @@
+name: Build from...
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to build from
+        required: true
+        type: string
+      sonar_scan:
+        description: Should run sonarcloud scan?
+        required: true
+        default: false
+        type: boolean
+      docker_push:
+        description: Push container to registry?
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  build_from:
+    uses: IndependentIP/ga-workflows/.github/workflows/gradle-build.yml@master
+    secrets: inherit
+    with:
+      branch: ${{ github.event.inputs.branch }}
+      sonar_scan: ${{ github.event.inputs.sonar_scan == 'true' }}
+      docker_push: ${{ github.event.inputs.docker_push == 'true' }}
